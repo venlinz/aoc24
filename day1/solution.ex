@@ -10,9 +10,8 @@ defmodule Solution do
 
   defp get_list() do
     get_stream()
-    |> Enum.map(&Integer.parse/1)
-    |> Enum.map(fn x -> elem(x, 0) end)
-    |> Enum.to_list()
+    |> Stream.map(&Integer.parse/1)
+    |> Stream.map(fn x -> elem(x, 0) end)
   end
 
   defp get_left_list() do
@@ -28,11 +27,12 @@ defmodule Solution do
   end
 
   def part2() do
-    left_elements_map = get_left_list() |> Enum.sort() |> Enum.dedup()
-    sorted_right_list = get_right_list() |> Enum.sort()
+    left_elements_map = get_left_list() |> Stream.dedup()
+    sorted_right_list = get_right_list()
+
     frequency_map =
       left_elements_map
-      |> Enum.map(fn x -> {x, Enum.count(sorted_right_list, fn y -> x == y end)} end)
+      |> Stream.map(fn x -> {x, Enum.count(sorted_right_list, fn y -> x == y end)} end)
       |> Map.new()
 
     get_left_list() |> Enum.reduce(0, fn x, acc -> acc + frequency_map[x] * x end)
