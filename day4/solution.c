@@ -72,8 +72,8 @@ uint32_t part1(Grid grid) {
 
 uint32_t part2(Grid grid) {
     uint32_t xmas_shape_count = 0;
-    for (int32_t y = 0; y < grid.column_count; y++) {
-        for (int32_t x = 0; x < grid.row_count; x++) {
+    for (int32_t y = 1; y < grid.column_count - 1; y++) {
+        for (int32_t x = 1; x < grid.row_count - 1; x++) {
             xmas_shape_count += is_mas_in_x_shape_from_origin(grid, x, y) ? 1 : 0;
         }
     }
@@ -88,16 +88,12 @@ bool is_mas_in_x_shape_from_origin(Grid grid, int32_t x, int32_t y) {
     char xmas_shape_characters[4] = {0};
     for (uint32_t i = 0; i < X_MAS_SHAPE_COORDINATES_LEN; ++i) {
         Direction dir = x_mas_shap_coordinates[i];
-        if (within_bounds(dir, x, y, grid.row_count, grid.column_count)) {
-            char letter = get_character_at_point(grid, y + dir.y, x + dir.x);
-            if (!is_legit_character_to_create_xmas_shape(letter)) {
-                return false;
-            }
-            xmas_shape_characters[xmas_positions_count] = letter; 
-            xmas_positions_count++;
-        } else {
+        char letter = get_character_at_point(grid, y + dir.y, x + dir.x);
+        if (!is_legit_character_to_create_xmas_shape(letter)) {
             return false;
         }
+        xmas_shape_characters[xmas_positions_count] = letter;
+        xmas_positions_count++;
     }
     if (does_create_valid_xmas_shape(xmas_shape_characters, xmas_positions_count)) {
         return true;
